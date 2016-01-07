@@ -1,0 +1,23 @@
+.flat-table {
+   width: 80%; 
+   margin-left: 10%;
+}
+
+th {
+    background-color: rgb(57, 193, 243);
+    color: white;
+    font-weight: bold;
+    font-size: 25px;
+    padding: 20px 30px;
+    text-align: center;
+}
+
+td {
+    background-color: rgb(238, 238, 238);
+    color: rgb(111, 111, 111);
+    padding: 20px 30px;
+    font-size: 20px;
+    text-align: center;
+    border-bottom: 1px solid;
+    border-color: rgb(220, 220, 220);
+}

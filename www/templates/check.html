@@ -1,5 +1,10 @@
-<ion-view view-title="Browse">
+<ion-view view-title="Work Stops">
   <ion-content>
+      <div class="row">
+          <div class="col col-100">
+              <h1 style="margin-top: 5%; margin-left: 42%;">Worked hours : {{workedHours}}</h1>
+          </div>
+      </div>
       <div class="row">
           <div class="col col-100">
               <button class="button button-calm large-button" ng-if="!checkin" ng-click="check()">
@@ -8,6 +13,22 @@
               <button class="button button-calm large-button" ng-if="checkin" ng-click="check()">
                   Checkout
               </button>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col col-100">
+              <div id="hoursTable" style="margin-top: 5%;">
+                  <table class="flat-table">
+                          <tr>
+                              <th>Event</th>
+                              <th>Event Time</th>
+                          </tr>
+                          <tr ng-repeat="evt in today">
+                              <td data-th="Check Type">{{evt.type}}</td>
+                              <td data-th="Check Time">{{evt.check}}</td>
+                          </tr>
+                  </table>
+              </div>
           </div>
       </div>
   </ion-content>

@@ -11,8 +11,16 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     init();
     
     function init(){
+        getActualDay();
+        var actualDay = $localstorage.getObject("today");
+        getFirstAndLastCheck(actualDay);
         $scope.checkin = false;
     };
+    
+    function getActualDay(){
+        var today = $localstorage.getObject("today");
+        $scope.today = today.evts;
+    }
     
     $scope.check = function(){
         $scope.checkin = !$scope.checkin;
@@ -21,6 +29,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     
     
     function registerCheck (){
+        getActualDay();
         if($scope.checkin){
             createEvent("CHECKIN");
         }
@@ -40,6 +49,9 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         };
         var today = $localstorage.getObject("today");
         today.evts.push(evt);
+        if(eventType == "CHECKOUT"){
+            getFirstAndLastCheck(today);
+        }
         $localstorage.setObject("today", today);
     };   
     
@@ -87,6 +99,35 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
                 $localstorage.setObject("actualMonth", nextMonth);
             }
         }
+    };
+    
+    function getFirstAndLastCheck(actualDay){
+        if(!$localstorage.isEmpty(actualDay.evts)){
+            var firstCheck = actualDay.evts[0].check;
+            var lastcheck = actualDay.evts[actualDay.evts.length-1].check;
+            $scope.workedHours = calculateWorkedHours(firstCheck, lastcheck);
+        }
+    }
+    
+    function calculateWorkedHours(firstCheck, lastCheck){
+        var firstHour = parseInt(firstCheck.split(':')[0]);
+        var firstMinute = parseInt(firstCheck.split(':')[1]);
+        var first = new Date (0,0,0,firstHour,firstMinute,0);
+        
+        var lastHour = parseInt(lastCheck.split(':')[0]);
+        var lastMinute = parseInt(lastCheck.split(':')[1]);
+        var last = new Date (0,0,0, lastHour, lastMinute, 0);
+        
+        var diff = last.getTime() - first.getTime();
+        var hours = Math.floor(diff /1000/60/60);
+        diff -= hours * 1000 * 60 * 60;
+        var minutes = Math.floor(diff / 1000 / 60);
+        
+        if(hours < 0){
+            hours = hours + 24;
+        }
+        
+        return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
     };
     
     function addZero(i) {

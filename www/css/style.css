@@ -1,8 +1,12 @@
 /* Empty. Add your own CSS if you like */
 
 .large-button {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
     margin-left: 15%;
-    margin-top: 10%;
+    margin-top: 5%;
     width: 70%;
-    height: 50px;
+    height: 90px;
 }
