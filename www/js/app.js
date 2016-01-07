@@ -29,9 +29,19 @@ angular.module('workstops', ['ionic'])
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'LoginCtrl'
   })
-
+  
+  .state('app.check', {
+    url: '/check',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/check.html',
+        controller: 'CheckCtrl'
+      }
+    }
+  })
+  
   .state('app.settings', {
     url: '/settings',
     views: {
@@ -52,5 +62,5 @@ angular.module('workstops', ['ionic'])
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/login');
+  $urlRouterProvider.otherwise('/app/check');
 });
