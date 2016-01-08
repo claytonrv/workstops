@@ -2,16 +2,16 @@
   <ion-content>
       <div class="row">
           <div class="col col-100">
-              <h1 style="margin-top: 5%; margin-left: 42%;">Worked hours : {{workedHours}}</h1>
+              <h1 style="margin-top: 5%; text-align: center;">Worked hours : {{workedHours}}</h1>
           </div>
       </div>
       <div class="row">
           <div class="col col-100">
               <button class="button button-calm large-button" ng-if="!checkin" ng-click="check()">
-                  Checkin
+                  Check-in
               </button>
               <button class="button button-calm large-button" ng-if="checkin" ng-click="check()">
-                  Checkout
+                  Check-out
               </button>
           </div>
       </div>

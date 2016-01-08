@@ -14,12 +14,18 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         getActualDay();
         var actualDay = $localstorage.getObject("today");
         getFirstAndLastCheck(actualDay);
-        $scope.checkin = false;
+        if(!$localstorage.isEmpty($localstorage.getObject("laststate")) && $localstorage.getObject("laststate") == "CHECKIN"){
+            $scope.checkin = true;    
+        }else {
+            $scope.checkin = false;    
+        }
     };
     
     function getActualDay(){
         var today = $localstorage.getObject("today");
-        $scope.today = today.evts;
+        if(!$localstorage.isEmpty(today)){
+            $scope.today = today.evts;
+        }
     }
     
     $scope.check = function(){
@@ -39,7 +45,10 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     };
     
     function createEvent(eventType){
-        verifyIfNewDay();
+        var laststate = $localstorage.getObject("laststate");
+        if($localstorage.isEmpty(laststate) || laststate == "CHECKOUT"){
+            verifyIfNewDay();
+        }
         var date = new Date();
         var hr = addZero(date.getHours());
         var min = addZero(date.getMinutes());
@@ -53,6 +62,8 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             getFirstAndLastCheck(today);
         }
         $localstorage.setObject("today", today);
+        $localstorage.setObject("laststate", eventType);
+        getActualDay();
     };   
     
     function verifyIfNewDay(){
@@ -102,7 +113,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     };
     
     function getFirstAndLastCheck(actualDay){
-        if(!$localstorage.isEmpty(actualDay.evts)){
+        if(!$localstorage.isEmpty(actualDay)){
             var firstCheck = actualDay.evts[0].check;
             var lastcheck = actualDay.evts[actualDay.evts.length-1].check;
             $scope.workedHours = calculateWorkedHours(firstCheck, lastcheck);
