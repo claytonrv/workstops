@@ -10,3 +10,8 @@
     width: 70%;
     height: 90px;
 }
+
+.page-title {
+    margin-top: 5%; 
+    text-align: center;
+}
