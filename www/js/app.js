@@ -42,6 +42,16 @@ angular.module('workstops', ['ionic'])
     }
   })
   
+  .state('app.history', {
+    url: '/history',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/monthHistory.html',
+        controller: 'HistoryCtrl'
+      }
+    }
+  })
+  
   .state('app.settings', {
     url: '/settings',
     views: {

@@ -1,0 +1,25 @@
+<ion-view view-title="Month Events History">
+    <ion-content>
+        <div class="row">
+            <div class="col col-100">
+                <h1 class="page-title">Month Events History</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-100">
+                <table class="flat-table">
+                    <tr>
+                        <th>Day</th>
+                        <th>Worked hours</th>
+<!--                        <th>Left hours</th>-->
+                    </tr>
+                    <tr ng-if="validMonth();" ng-repeat="day in month">
+                        <td>{{day.day}}</td>
+                        <td>{{day.workedHours}}</td>
+<!--                        <td></td>-->
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
