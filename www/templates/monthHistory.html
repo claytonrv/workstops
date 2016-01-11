@@ -5,20 +5,63 @@
                 <h1 class="page-title">Month Events History</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col col-100">
-                <table class="flat-table">
-                    <tr>
-                        <th>Day</th>
-                        <th>Worked hours</th>
-<!--                        <th>Left hours</th>-->
-                    </tr>
-                    <tr ng-if="validMonth();" ng-repeat="day in month">
-                        <td>{{day.day}}</td>
-                        <td>{{day.workedHours}}</td>
-<!--                        <td></td>-->
-                    </tr>
-                </table>
+        <div id="month-table-content" ng-show="!showDayEdit">
+            <div class="row">
+                <div class="col col-100">
+                    <table class="flat-table">
+                        <tr>
+                            <th>Day</th>
+                            <th>Worked hours</th>
+                            <th>Day Events view</th>
+    <!--                        <th>Left hours</th>-->
+                        </tr>
+                        <tr ng-if="validMonth();"
+                            ng-repeat="day in month">
+                            <td>{{day.day}}</td>
+                            <td>{{day.workedHours}}</td>
+                            <td><button class="button button-block medium-button" 
+                                        ng-click="editDayEvents(day);">
+                                    Events
+                                </button>
+                            </td>
+    <!--                        <td></td>-->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="monthday-content" ng-show="showDayEdit">
+            <div class="row">
+                <div class="col-90" style="margin-left: 5%;">
+                    <button class="button large-button button-bar-inline" ng-click="unselectDay()">Return</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-100">
+                    <h1 class="edition-title">Day {{selectedDay.day}}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-100">
+                    <table class="flat-table">
+                        <tr>
+                            <th>Event Type</th>
+                            <th>Event Time</th>
+                        </tr>
+                        <tr
+                        ng-repeat="evt in selectedDay.evts">
+                            <td>{{evt.type}}</td>
+                            <td>{{evt.check}}</td>
+                        </tr>
+                    </table>
+<!--                    <ion-list class="days-list"
+                        collection-repeat="evt in selectedDay.evts">
+                        <ion-item class="item item-list">
+                            <h5>Event Type: {{evt.type}}</h5>
+                            <h5>Event Time: {{evt.check}}</h5>
+                        </ion-item>
+                    </ion-list>-->
+                </div>
             </div>
         </div>
     </ion-content>

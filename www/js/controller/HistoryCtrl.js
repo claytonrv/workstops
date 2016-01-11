@@ -3,6 +3,7 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $localsto
     init();
     
     function init(){
+        $scope.showDayEdit = false;
         getActualMonth();
         getMonthDays();
     };
@@ -35,5 +36,15 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $localsto
       } else {
           return true;
       }
+    };
+    
+    $scope.editDayEvents = function(day){
+      $scope.showDayEdit = true;  
+      $scope.selectedDay = day;
+    };
+    
+    $scope.unselectDay = function(){
+        $scope.showDayEdit = false;
+        $scope.selectedDay = "";
     };
 });
