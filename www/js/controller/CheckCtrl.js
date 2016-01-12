@@ -44,9 +44,35 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     
     function getFirstAndLastCheck(actualDay){
         if(!$localstorage.isEmpty(actualDay)){
-            var firstCheck = actualDay.evts[0].check;
-            var lastcheck = actualDay.evts[actualDay.evts.length-1].check;
-            $scope.workedHours = apiCheck.calculateWorkedTime(firstCheck, lastcheck);
+            var firstCheck;
+            var lastCheck;
+            for(var i=0; i<actualDay.evts.length; i++){
+                if(actualDay.evts[i].type == "CHECKIN"){
+                     firstCheck = actualDay.evts[i].check;
+                }else if(actualDay.evts[i].type == "CHECKOUT"){
+                    lastCheck = actualDay.evts[i].check;
+                    if($localstorage.isEmpty($scope.workedHours)){
+                        $scope.workedHours = apiCheck.calculateWorkedTime(firstCheck, lastCheck);
+                    }else {
+                        //TODO move to a function on apiCheck, something like incrementWorkedTime();
+                        var registeredTime = ((+$scope.workedHours.split(":")[0]) * 3600) + ((+$scope.workedHours.split(":")[1]) * 60);
+                        
+                        var newResgister = apiCheck.calculateWorkedTime(firstCheck, lastCheck);
+                        var newTimeRegister = ((+newResgister.split(":")[0]) * 60 * 60) + ((+newResgister.split(":")[1]) * 60);
+                        
+                        var totalseconds = parseInt(registeredTime,10) + parseInt(newTimeRegister,10);
+                        
+                        var totalTime = parseInt(totalseconds,10);
+                        var hours = Math.floor(totalTime / 3600);
+                        var minutes = Math.floor((totalTime - (hours * 3600)) / 60);
+                        
+                        if(hours < 10) {hours = "0"+hours;}
+                        if(minutes < 10) {minutes = "0"+minutes;}
+                        
+                        $scope.workedHours = hours+":"+minutes;
+                    }
+                }
+            }
         }
     }
     
