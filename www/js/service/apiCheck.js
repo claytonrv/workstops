@@ -115,6 +115,7 @@ angular.module("workstops").service("apiCheck", function($localstorage){
     this.calculateTotalWorkedTimeInDay = function(day){
         var firstCheck;
         var lastCheck;
+        day.workedHours = "";
         for(var i=0; i<day.evts.length; i++){
             if(day.evts[i].type == "CHECKIN"){
                  firstCheck = day.evts[i].check;

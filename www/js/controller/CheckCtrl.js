@@ -17,6 +17,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     
     function getActualDay(){
         var today = $localstorage.getObject("today");
+        $scope.workedHours = $localstorage.getObject("workedHours");
         if(!$localstorage.isEmpty(today)){
             $scope.today = today.evts;
         }
@@ -44,8 +45,9 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     function getWorkedHours(actualDay){
         if(!$localstorage.isEmpty(actualDay)){
             actualDay.workedHours = apiCheck.calculateTotalWorkedTimeInDay(actualDay);
-            console.log(actualDay.workedHours);
-            $scope.workedHours = actualDay.workedHours;
+            $localstorage.setObject("today", actualDay);
+            $localstorage.setObject("workedHours", actualDay.workedHours);
+            $scope.workedHours = $localstorage.getObject("workedHours");
         }
     }
     
