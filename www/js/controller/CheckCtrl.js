@@ -29,7 +29,6 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     
     
     function registerCheck (){
-        getActualDay();
         if($scope.checkin){
             apiCheck.createEvent("CHECKIN");
         }

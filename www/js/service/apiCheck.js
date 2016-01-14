@@ -124,12 +124,11 @@ angular.module("workstops").service("apiCheck", function($localstorage){
                     day.workedHours = calculateWorkedHours(firstCheck, lastCheck);
                 }else {
                     var newResgister = calculateWorkedHours(firstCheck, lastCheck);
-                    console.log("WORKED HOURS: "+day.workedHours);
-                    console.log("WORKED INCREMENT: "+newResgister);
-                    return incrementWorkedHours(day.workedHours,newResgister);
+                    day.workedHours = incrementWorkedHours(day.workedHours,newResgister); 
                 }
             }
         }
+        return day.workedHours;
     };
     
     function addZero(i) {
