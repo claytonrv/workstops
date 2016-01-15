@@ -5,6 +5,8 @@
     font-weight: bold;
     text-align: center;
     border-radius: 50px;
+    border:outset !important;
+    border-color: rgb(220, 220, 220) !important;
     margin-left: 15%;
     margin-top: 5%;
     width: 70%;
@@ -15,6 +17,8 @@
     font-size: 23px;
     font-weight: bold;
     text-align: center;
+    border:outset;
+    border-color: rgb(220, 220, 220);
     border-radius: 50px;
     margin-left: 15%;
     margin-top: 5%;
@@ -39,4 +43,25 @@
     height: 50vh !important;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+.workload-select{
+    max-width:40% !important;
+}
+
+.item-list{
+    display: block;
+    margin-left: 20%;
+    width: 60%;
+    height: 80px;
+    border:outset;
+    border-color: rgb(220, 220, 220);
+    border-radius: 60px;
+    background-color: #f8f8f8;
+}
+
+.workload-item {
+    text-align: center;
+    font-size: 30px !important;
+    font-weight: bold;
 }

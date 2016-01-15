@@ -1,5 +1,21 @@
 <ion-view view-title="Playlist">
   <ion-content>
-    <h1>Playlist</h1>
+      <div class="row">
+          <div class="col col-100">
+              <h1 class="page-title">Select your workload</h1>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col col-center">
+                <ion-list id="workloadSelect">
+                    <ion-item class="item-list"
+                              id="workloadItem{{value.number}}"
+                              ng-click="saveWorkload(value.number);changeColor('workloadItem'+value.number)"
+                              collection-repeat="value in data.workloadOptions">
+                        <h4 class="workload-item">{{value.number}}</h4>
+                    </ion-item>
+                </ion-list>
+          </div>
+      </div>
   </ion-content>
 </ion-view>
