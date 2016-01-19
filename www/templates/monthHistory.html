@@ -1,18 +1,18 @@
 <ion-view view-title="Month Events History">
     <ion-content>
-        <div class="row">
-            <div class="col col-100">
-                <h1 class="page-title">Month Events History</h1>
-            </div>
-        </div>
         <div id="month-table-content" ng-show="!showDayEdit">
             <div class="row">
                 <div class="col col-100">
-                    <table class="flat-table">
+                    <h1 class="page-title" >{{monthName}} History</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-100">
+                    <table class="flat-table extended-table">
                         <tr>
                             <th>Day</th>
-                            <th>Worked hours</th>
-                            <th>Day Events view</th>
+                            <th>Worked Time</th>
+                            <th>Day Events</th>
     <!--                        <th>Left hours</th>-->
                         </tr>
                         <tr ng-if="validMonth();"
@@ -21,7 +21,7 @@
                             <td>{{day.workedHours}}</td>
                             <td><button class="button button-block medium-button" 
                                         ng-click="editDayEvents(day);">
-                                    Events
+                                    View
                                 </button>
                             </td>
     <!--                        <td></td>-->
@@ -38,15 +38,15 @@
             </div>
             <div class="row">
                 <div class="col col-100">
-                    <h1 class="edition-title">Day {{selectedDay.day}}</h1>
+                    <h1 class="edition-title">{{monthName}} {{selectedDay.day}} Events</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-100">
                     <table class="flat-table">
                         <tr>
-                            <th>Event Type</th>
-                            <th>Event Time</th>
+                            <th>Type</th>
+                            <th>Time</th>
                         </tr>
                         <tr
                         ng-repeat="evt in selectedDay.evts">

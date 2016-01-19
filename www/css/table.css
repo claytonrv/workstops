@@ -1,6 +1,10 @@
 .flat-table {
-   width: 80%; 
+   width: 80%;
    margin-left: 10%;
+}
+
+.extended-table {
+    margin: auto !important;
 }
 
 th {

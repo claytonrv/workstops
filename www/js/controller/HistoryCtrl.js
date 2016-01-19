@@ -1,4 +1,4 @@
-angular.module("workstops").controller("HistoryCtrl", function($scope, $localstorage, apiCheck){
+angular.module("workstops").controller("HistoryCtrl", function($scope, $localstorage, apiCheck, apiMonths){
     
     init();
     
@@ -6,6 +6,7 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $localsto
         $scope.showDayEdit = false;
         getActualMonth();
         getMonthDays();
+        getMonthName();
     };
     
     function getActualMonth(){
@@ -23,6 +24,11 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $localsto
             });
         }
     };
+    
+    function getMonthName(){
+        $scope.monthName = apiMonths.verifyMonthName($scope.actualMonth.month);
+    };
+    
     
     $scope.validMonth = function(){
         getActualMonth();
