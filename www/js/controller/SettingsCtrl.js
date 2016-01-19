@@ -1,4 +1,4 @@
-angular.module("workstops").controller("SettingsCtrl", function($scope, $localstorage){
+angular.module("workstops").controller("SettingsCtrl", function($scope, $localstorage, $ionicModal){
     
     init();
     var lastChanged;
@@ -50,6 +50,23 @@ angular.module("workstops").controller("SettingsCtrl", function($scope, $localst
             lastChanged = id;
         }
         $localstorage.setObject("lastWorkloadOptionSelected", lastChanged);
+    };
+    
+    $ionicModal.fromTemplateUrl('configurationSavedModal.html', {
+        scope: $scope, animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.savedConfigurationModal = modal;
+    });  
+
+    $scope.openModal = function() {
+        $scope.savedConfigurationModal.show();
+        setTimeout(function(){
+            $scope.closeModal();
+        },2000);
+    };
+
+    $scope.closeModal = function() {
+        $scope.savedConfigurationModal.hide();
     };
     
 });

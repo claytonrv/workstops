@@ -10,7 +10,7 @@
             <ion-list id="workloadSelect">
                 <ion-item ng- class="item-list"
                           id="workloadItem{{value.number}}"
-                          ng-click="saveWorkload(value.number);changeColor('workloadItem'+value.number)"
+                          ng-click="saveWorkload(value.number);changeColor('workloadItem'+value.number);openModal()"
                           ng-repeat="value in data.workloadOptions"> 
                     <h4 class="workload-item">{{value.number}}</h4>
                 </ion-item>
@@ -19,4 +19,20 @@
           </div>
       </div>
   </ion-content>
+    
+    <script id="configurationSavedModal.html" type="text/ng-template">
+        <div class="modal">
+            <ion-content scroll="false" class="modal-text">
+                <div class="row">
+                    <div class="col col-80">
+                        <span>The configuration has been saved!</span>
+                    </div>
+                    <div class="col col-20">
+                        <img class="modal-image" src="img/check.png" alt="check" />
+                    </div>
+                </div>
+            </ion-content>
+        </div>
+    </script>
+    
 </ion-view>

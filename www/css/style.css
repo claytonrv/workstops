@@ -65,3 +65,24 @@
     font-size: 30px !important;
     font-weight: bold;
 }
+
+.modal {
+    min-height: 8%; 
+    max-height: 8%;
+    border:ridge;
+    border-radius: 30px;
+    border-color:rgb(220, 220, 220);
+    background-color: #f8f8f8;
+}
+
+.modal-text {
+    font-size: 20px;
+    text-align: center;
+    font-style: oblique;
+}
+
+.modal-image {
+    max-height: 30px;
+    margin-top: -4%;
+    margin-right: 100%;
+}
