@@ -17,10 +17,27 @@ angular.module("workstops").controller("SettingsCtrl", function($scope, $localst
               {number: 8}
           ] 
         };
+        
+        lastChanged = $localstorage.getObject("lastWorkloadOptionSelected");
+    };
+    
+    $scope.selectLastOption = function(){
+      if(!$localstorage.isEmpty(lastChanged)){
+        if(document.getElementById(lastChanged)){
+          document.getElementById(lastChanged).style.borderColor="#73AD21";
+        } 
+      }  
     };
     
     $scope.saveWorkload = function (value){
-      $localstorage.setObject("workload",value);  
+      var configs = $localstorage.getObject("configs");
+      
+      if($localstorage.isEmpty(configs)){
+        var configs = {};
+      }
+      
+      configs.workload = value;
+      $localstorage.setObject('configs', configs);
     };
     
     $scope.changeColor = function (id){
@@ -32,6 +49,7 @@ angular.module("workstops").controller("SettingsCtrl", function($scope, $localst
             document.getElementById(id).style.borderColor="#73AD21";
             lastChanged = id;
         }
+        $localstorage.setObject("lastWorkloadOptionSelected", lastChanged);
     };
     
 });
