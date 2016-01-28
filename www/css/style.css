@@ -20,12 +20,12 @@
     border:outset;
     border-color: rgb(220, 220, 220);
     border-radius: 50px;
-    margin-top: 5%;
-    min-width: 100%;
-    min-height: 100%;
+    margin: auto !important;
+    width: 80% !important;
 }
 
 .page-title {
+    width: 100%;
     margin-top: 5%; 
     text-align: center;
 }

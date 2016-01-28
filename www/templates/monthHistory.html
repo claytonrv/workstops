@@ -3,7 +3,7 @@
         <div id="month-table-content" ng-show="!showDayEdit">
             <div class="row">
                 <div class="col col-100">
-                    <h1 class="page-title" >{{monthName}} History</h1>
+                    <h1 class="page-title" >{{monthName}}</h1>
                 </div>
             </div>
             <div class="row">
@@ -11,14 +11,12 @@
                     <table class="flat-table extended-table">
                         <tr>
                             <th>Day</th>
-                            <th>Worked Time</th>
-                            <th>Day Events</th>
+                            <th>Events</th>
     <!--                        <th>Left hours</th>-->
                         </tr>
                         <tr ng-if="validMonth();"
                             ng-repeat="day in month">
                             <td>{{day.day}}</td>
-                            <td>{{day.workedHours}}</td>
                             <td><button class="button button-block medium-button" 
                                         ng-click="editDayEvents(day);">
                                     View
@@ -38,14 +36,17 @@
             </div>
             <div class="row">
                 <div class="col col-100">
-                    <h1 class="edition-title">{{monthName}} {{selectedDay.day}} Events</h1>
+                    <h1 class="edition-title">{{monthName}} {{selectedDay.day}}</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-100">
+                    <h3 class="page-title">Worked: {{selectedDay.workedHours}}</h3>
+                    <h3 class="page-title">Extra: 00:00</h3>
+                    <h3 class="page-title">Fault: 05:59</h3>
                     <table class="flat-table">
                         <tr>
-                            <th>Type</th>
+                            <th>Event</th>
                             <th>Time</th>
                         </tr>
                         <tr
