@@ -1,5 +1,5 @@
 angular.module("workstops").service("$localstorage", ['$window', function ($window){
-        
+
          var _isEmpty = function (obj) {
             obj = obj || {};
             return Object.keys(obj).length === 0;

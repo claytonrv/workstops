@@ -1,4 +1,4 @@
-angular.module("workstops").service("apiCheck", function($localstorage){
+angular.module("workstops").service("apiCheck", function($localstorage, apiMonths){
     
     this.createEvent = function(eventType){
         var laststate = $localstorage.getObject("laststate");
@@ -23,18 +23,17 @@ angular.module("workstops").service("apiCheck", function($localstorage){
         today.evts.push(evt);
         $localstorage.setObject("today", today);
         $localstorage.setObject("laststate", eventType);
+        updateDailyEventsOnMonth();
+        apiMonths.monthUpdated();
     }; 
     
     function verifyIfNewDay(){
-        verifyIfNewMonth();
         var newDay = new Date();
         var lastRegisteredDay = $localstorage.getObject("today");
         if (!$localstorage.isEmpty(lastRegisteredDay)) {
             if (lastRegisteredDay.day != addZero(newDay.getDate())) {
                 lastRegisteredDay.workedHours = $localstorage.getObject("workedHours");
-                var actualMonth = $localstorage.getObject("actualMonth");
-                actualMonth.days.push(lastRegisteredDay);
-                $localstorage.setObject("actualMonth", actualMonth);
+                pushDaysOnActualMonth(lastRegisteredDay);
                 var nextDay = {
                     day: addZero(newDay.getDate()),
                     evts: []
@@ -49,7 +48,9 @@ angular.module("workstops").service("apiCheck", function($localstorage){
             };
             lastRegisteredDay = today;
             $localstorage.setObject("today", lastRegisteredDay);
+            pushDaysOnActualMonth(today);
         }   
+        verifyIfNewMonth();
     };
     
     function verifyIfNewMonth(){
@@ -71,6 +72,30 @@ angular.module("workstops").service("apiCheck", function($localstorage){
                 $localstorage.setObject("actualMonth", nextMonth);
             }
         }
+    };
+    
+    function pushDaysOnActualMonth(day){
+        var actualMonth = $localstorage.getObject("actualMonth");
+        actualMonth.days.push(day);
+        $localstorage.setObject("actualMonth", actualMonth);
+    };
+    
+    
+    function updateDailyEventsOnMonth () {
+      var today = $localstorage.getObject('today');
+      var month = $localstorage.getObject('actualMonth');
+      month.days.forEach(function(selectedDay){
+          if(today.day == selectedDay.day){
+              for(var i=0; i<today.evts.length; i++){
+                  if(today.evts[i] != selectedDay.evts[i] || !selectedDay.evts[i]){
+                      selectedDay.evts[i] = today.evts[i];
+                  }
+              }
+          }
+      });
+      if(month && month.days){
+        $localstorage.setObject('actualMonth', month);   
+      }
     };
     
     function calculateWorkedHours(firstCheck, lastCheck){

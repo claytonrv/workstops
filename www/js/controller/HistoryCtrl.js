@@ -1,10 +1,11 @@
-angular.module("workstops").controller("HistoryCtrl", function($scope, $localstorage, apiCheck, apiMonths){
+angular.module("workstops").controller("HistoryCtrl", function($scope, $localstorage, apiCheck, apiMonths, $interval){
     
     init();
     
+    $interval(10000, verifyMonthUpdates);
+    
     function init(){
         $scope.showDayEdit = false;
-        getActualMonth();
         getMonthDays();
         getMonthName();
     };
@@ -47,5 +48,13 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $localsto
     $scope.unselectDay = function(){
         $scope.showDayEdit = false;
         $scope.selectedDay = "";
+    };
+    
+    
+    function verifyMonthUpdates (){
+        if(apiMonths.getUpdateMonth()){
+            init();
+            apiMonths.monthUpdated();
+        }
     };
 });

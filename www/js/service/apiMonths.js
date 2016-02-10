@@ -1,9 +1,11 @@
 angular.module("workstops").service("apiMonths", function($localstorage){
     
+    var updateMonth;
     var yearMonths;
     init();
     
     function init (){
+    updateMonth = false;
     yearMonths = $localstorage.getObject("yearMonths");
         if($localstorage.isEmpty(yearMonths)){
             yearMonths = [
@@ -30,5 +32,13 @@ angular.module("workstops").service("apiMonths", function($localstorage){
               return yearMonths[i].month;
           }
       }  
+    };
+    
+    this.monthUpdated = function(){
+        updateMonth = !updateMonth;
+    };
+    
+    this.getUpdateMonth = function(){
+      return updateMonth;  
     };
 });
