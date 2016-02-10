@@ -20,7 +20,8 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $localsto
         if(!$localstorage.isEmpty($scope.actualMonth) && !$localstorage.isEmpty($scope.actualMonth.days)){
             var days = $scope.actualMonth.days;
             days.forEach(function(day){
-                day.workedHours = apiCheck.calculateTotalWorkedTimeInDay(day);  
+                day.workedHours = apiCheck.calculateTotalWorkedTimeInDay(day);
+                day.falthours = apiCheck.calculateFaltHours(day);
                 $scope.month.push(day);
             });
         }

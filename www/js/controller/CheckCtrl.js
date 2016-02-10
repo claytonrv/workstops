@@ -7,7 +7,9 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     function init(){
         getActualDay();
         var actualDay = $localstorage.getObject("today");
-        getWorkedHours(actualDay);
+        if(actualDay){
+            getWorkedHours(actualDay);
+        }
         if(!$localstorage.isEmpty($localstorage.getObject("laststate")) && $localstorage.getObject("laststate") == "CHECKIN"){
             $scope.checkin = true;    
         }else {

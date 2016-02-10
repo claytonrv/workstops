@@ -76,6 +76,10 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
     
     function pushDaysOnActualMonth(day){
         var actualMonth = $localstorage.getObject("actualMonth");
+        if($localstorage.isEmpty(actualMonth)){
+            verifyIfNewMonth();
+            actualMonth = $localstorage.getObject('actualMonth');
+        }
         actualMonth.days.push(day);
         $localstorage.setObject("actualMonth", actualMonth);
     };
@@ -84,15 +88,19 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
     function updateDailyEventsOnMonth () {
       var today = $localstorage.getObject('today');
       var month = $localstorage.getObject('actualMonth');
-      month.days.forEach(function(selectedDay){
-          if(today.day == selectedDay.day){
-              for(var i=0; i<today.evts.length; i++){
-                  if(today.evts[i] != selectedDay.evts[i] || !selectedDay.evts[i]){
-                      selectedDay.evts[i] = today.evts[i];
-                  }
-              }
-          }
-      });
+        if (!$localstorage.isEmpty(month.days)) {
+            month.days.forEach(function (selectedDay) {
+                if (today.day == selectedDay.day) {
+                    for (var i = 0; i < today.evts.length; i++) {
+                        if (today.evts[i].type != selectedDay.evts[i].type && today.evts[i].check != selectedDay.evts[i].check || !selectedDay.evts[i]) {
+                            selectedDay.evts[i] = today.evts[i];
+                        }
+                    }
+                }
+            });
+        }else {
+            month.days.push(today);
+        }
       if(month && month.days){
         $localstorage.setObject('actualMonth', month);   
       }
@@ -137,20 +145,30 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         return totalWorkedHours;
     };
     
+    this.calculateFaltHours = function (day){
+      var workedTime = day.workedHours;
+      var configs = $localstorage.getObject('configs');
+      var workload = addZero(configs.workload)+":00";
+      var hours = calculateWorkedHours(workedTime, workload);
+      return hours;
+    };
+    
     this.calculateTotalWorkedTimeInDay = function(day){
         var firstCheck;
         var lastCheck;
         day.workedHours = "";
-        for(var i=0; i<day.evts.length; i++){
-            if(day.evts[i].type == "CHECKIN"){
-                 firstCheck = day.evts[i].check;
-            }else if(day.evts[i].type == "CHECKOUT"){
-                lastCheck = day.evts[i].check;
-                if($localstorage.isEmpty(day.workedHours)){
-                    day.workedHours = calculateWorkedHours(firstCheck, lastCheck);
-                }else {
-                    var newResgister = calculateWorkedHours(firstCheck, lastCheck);
-                    day.workedHours = incrementWorkedHours(day.workedHours,newResgister); 
+        if (day.evts) {
+            for (var i = 0; i < day.evts.length; i++) {
+                if (day.evts[i].type == "CHECKIN") {
+                    firstCheck = day.evts[i].check;
+                } else if (day.evts[i].type == "CHECKOUT") {
+                    lastCheck = day.evts[i].check;
+                    if ($localstorage.isEmpty(day.workedHours)) {
+                        day.workedHours = calculateWorkedHours(firstCheck, lastCheck);
+                    } else {
+                        var newResgister = calculateWorkedHours(firstCheck, lastCheck);
+                        day.workedHours = incrementWorkedHours(day.workedHours, newResgister);
+                    }
                 }
             }
         }
