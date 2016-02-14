@@ -18,7 +18,7 @@
                             ng-repeat="day in month">
                             <td>{{day.day}}</td>
                             <td><button class="button button-block medium-button" 
-                                        ng-click="editDayEvents(day);">
+                                        ng-click="editDayEvents(day)">
                                     View
                                 </button>
                             </td>
@@ -66,4 +66,20 @@
             </div>
         </div>
     </ion-content>
+    
+    <script id="unselectedWorkload.html" type="text/ng-template">
+        <div class="modal">
+            <ion-content scroll="false" class="modal-text">
+                <div class="row">
+                    <div class="col col-80">
+                        <span>you didn't select a workload!</span>
+                    </div>
+                    <div class="col col-20">
+                        <img class="modal-image" src="img/alert.png" alt="alert" />
+                    </div>
+                </div>
+            </ion-content>
+        </div>
+    </script>
+    
 </ion-view>
