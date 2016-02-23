@@ -33,13 +33,14 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         if (!$localstorage.isEmpty(lastRegisteredDay)) {
             if (lastRegisteredDay.day != addZero(newDay.getDate())) {
                 lastRegisteredDay.workedHours = $localstorage.getObject("workedHours");
-                pushDaysOnActualMonth(lastRegisteredDay);
+                updateDailyEventsOnMonth();
                 var nextDay = {
                     day: addZero(newDay.getDate()),
                     evts: []
                 };
                 $localstorage.setObject("workedHours", "00:00");
                 $localstorage.setObject("today",nextDay);
+                pushDaysOnActualMonth(nextDay);
             }
         }else {
             var today = {
@@ -108,6 +109,26 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         }
     };
     
+    
+    function greaterThan(firstValue, secondValue){
+        firstHours = parseInt(firstValue.split(':')[0]);
+        firstMinutes = parseInt(firstValue.split(':')[1]);
+        secondHours = parseInt(secondValue.split(':')[0]);
+        secondMinutes = parseInt(secondValue.split(':')[1]);
+        
+        if(firstHours > secondHours){
+            return true;
+        }else if(firstHours == secondHours){
+            if(firstMinutes > secondMinutes){
+                return true;
+            }else {
+                return false;
+            }
+        }else if(firstHours < secondHours){
+            return false;
+        }
+    };
+    
     function calculateWorkedHours(firstCheck, lastCheck){
         var firstHour = parseInt(firstCheck.split(':')[0]);
         var firstMinute = parseInt(firstCheck.split(':')[1]);
@@ -147,14 +168,38 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         return totalWorkedHours;
     };
     
-    this.calculateFaltHours = function (day){
+    
+    this.verifyHoursType = function (day) {
+        var workedHours = day.workedHours;
+        var configs = $localstorage.getObject('configs');
+        var workload;
+        if (!$localstorage.isEmpty(configs) && configs.workload != '' && configs.workload != null && configs.workload != 'undefined') {
+            workload = addZero(configs.workload) + ":00";
+        }
+        if (workload && workedHours) {
+            if (greaterThan(workedHours, workload)) {
+                hours = 'EXTRA_HOURS';
+            } else {
+                hours = 'FALT_HOURS';
+            }
+        } else {
+            hours = 'NO_WORKLOAD';
+        }
+        return hours;
+    };
+    
+    this.calculateDifferenceHours = function (day, type){
       var workedTime = day.workedHours;
       var configs = $localstorage.getObject('configs');
       var hours;
       var workload;
       if(!$localstorage.isEmpty(configs) && configs.workload != '' && configs.workload != null && configs.workload != 'undefined'){
-        workload = addZero(configs.workload)+":00";     
-        hours = calculateWorkedHours(workedTime, workload);
+        workload = addZero(configs.workload)+":00";
+        if(type == 'EXTRA'){
+            hours = calculateWorkedHours(workload, workedTime);   
+        }else { 
+            hours = calculateWorkedHours(workedTime, workload);      
+        }
       }else {
           hours = 'NO_WORKLOAD';
       }

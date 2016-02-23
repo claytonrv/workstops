@@ -1,5 +1,12 @@
 <ion-view view-title="Month Events History">
     <ion-content>
+        <div id='errorMsg' ng-show='!eventsToShow'>
+            <div class='row'>
+                <div class='col col-100'>
+                    <h1 class="page-title" >{{msg}}</h1>
+                </div>
+            </div>
+        </div>
         <div id="month-table-content" ng-show="!showDayEdit">
             <div class="row">
                 <div class="col col-100">
@@ -42,7 +49,7 @@
             <div class="row">
                 <div class="col col-100">
                     <h3 class="page-title">Worked: {{selectedDay.workedHours}}</h3>
-                    <h3 class="page-title">Extra: 00:00</h3>
+                    <h3 class="page-title">Extra: {{selectedDay.extraHours}}</h3>
                     <h3 class="page-title">Fault: {{selectedDay.falthours}}</h3>
                     <table class="flat-table">
                         <tr>
@@ -72,7 +79,7 @@
             <ion-content scroll="false" class="modal-text">
                 <div class="row">
                     <div class="col col-80">
-                        <span>you didn't select a workload!</span>
+                        <span>{{message}}</span>
                     </div>
                     <div class="col col-20">
                         <img class="modal-image" src="img/alert.png" alt="alert" />

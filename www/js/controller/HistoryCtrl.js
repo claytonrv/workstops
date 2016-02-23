@@ -5,6 +5,7 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     $interval(10000, verifyMonthUpdates);
     
     function init(){
+        $scope.eventsToShow = false;
         $scope.noWorkload = false;
         $scope.showDayEdit = false;
         getMonthDays();
@@ -22,11 +23,18 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
             var days = $scope.actualMonth.days;
             days.forEach(function(day){
                 day.workedHours = apiCheck.calculateTotalWorkedTimeInDay(day);
-                var faultHours = apiCheck.calculateFaltHours(day);
-                if(faultHours == 'NO_WORKLOAD'){
+                var hoursType = apiCheck.verifyHoursType(day);
+                if(hoursType == 'NO_WORKLOAD'){
                     $scope.noWorkload = true;
+                }else if(hoursType == 'EXTRA_HOURS'){
+                    var extraHours = apiCheck.calculateDifferenceHours(day,'EXTRA');
+                    day.extraHours = extraHours;
+                    day.falthours = '00:00';
+                    $scope.noWorkload = false;
                 }else {
+                    var faultHours = apiCheck.calculateDifferenceHours(day,'FAULT');
                     day.falthours = faultHours;
+                    day.extraHours = '00:00';
                     $scope.noWorkload = false;
                 }   
                 $scope.month.push(day);
@@ -35,7 +43,16 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     };
     
     function getMonthName(){
-        $scope.monthName = apiMonths.verifyMonthName($scope.actualMonth.month);
+        if($scope.actualMonth){
+            $scope.monthName = apiMonths.verifyMonthName($scope.actualMonth.month);
+            $scope.eventsToShow = false;            
+        }else {
+         $scope.eventsToShow = false;  
+         $scope.msg = 'Nothing to be shown now ...';
+         setTimeout(function(){
+            $scope.changeRoute("#/app/home", true);
+        },3000);
+        }
     };
     
     $scope.workloadSelected = function (){
