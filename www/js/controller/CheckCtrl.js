@@ -43,6 +43,21 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         }
     };
     
+    $scope.removeEvt = function(evtId){
+        var today = $localstorage.getObject("today");
+        if(today.evts.length >= 1){
+            today.evts.pop();
+        }
+        $localstorage.setObject("today", today);
+        var lastIndex = today.evts.pop();
+        if($localstorage.isEmpty(lastIndex)){
+            $localstorage.setObject("laststate","");
+        }else{
+         $localstorage.setObject("laststate",lastIndex.type);   
+        }
+        init();
+    };
+    
     $scope.saveEdit = function (evtId){
         var today = $localstorage.getObject('today');
         var editedCheck;
