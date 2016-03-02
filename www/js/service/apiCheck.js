@@ -10,7 +10,8 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         var min = addZero(date.getMinutes());
         var evt = {
             type: eventType,
-            check: hr+":"+min
+            check: hr+":"+min,
+            id: eventType+"-"+hr+":"+min
         };
         var today = $localstorage.getObject("today");
         if($localstorage.isEmpty(today)){

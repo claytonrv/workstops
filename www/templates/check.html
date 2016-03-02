@@ -21,10 +21,14 @@
                           <tr>
                               <th>Event</th>
                               <th>Time</th>
+                              <th></th>
                           </tr>
                           <tr ng-repeat="evt in today">
                               <td data-th="Check Type">{{evt.type}}</td>
-                              <td data-th="Check Time">{{evt.check}}</td>
+                              <td data-th="Check Time" ng-if="!editing(evt.id)" >{{evt.check}}</td>
+                              <td data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id)"><input class="evt-input" ng-model="evt.check" /></td>
+                              <td data-th="Edit Check" ng-if="!editing(evt.id)" ><a class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
+                              <td data-th="Edit Check" ng-if="editing(evt.id)" ><a class="edit-link"><img ng-click="saveEdit(evt.id)" class="edit-image" src="img/save.png" alt="save" /></a></td>
                           </tr>
                   </table>
           </div>

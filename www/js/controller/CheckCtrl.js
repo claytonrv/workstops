@@ -6,6 +6,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     
     function init(){
         getActualDay();
+        clearEditVariables();
         var actualDay = $localstorage.getObject("today");
         if(actualDay){
             getWorkedHours(actualDay);
@@ -29,6 +30,44 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         $scope.checkin = !$scope.checkin;
         registerCheck();
     };
+    
+    $scope.onEdit = function (evtId){
+        $scope.selectedEvtId = evtId;
+    };
+    
+    $scope.editing = function(evtId){
+        if($scope.selectedEvtId && evtId == $scope.selectedEvtId){
+            return true;
+        }else {
+            return false;
+        }
+    };
+    
+    $scope.saveEdit = function (evtId){
+        var today = $localstorage.getObject('today');
+        var editedCheck;
+        $scope.today.forEach(function(evt){
+           if(evt.id == evtId){
+               editedCheck = evt.check;
+           } 
+        });
+        today.evts.forEach(function (evt){
+            if(evt.id == evtId){
+                if(editedCheck){
+                    evt.check = editedCheck;
+                }
+            }
+        });
+        $localstorage.setObject('today', today);
+        clearEditVariables();
+        init();
+    };
+    
+    function clearEditVariables(){
+        $scope.evtCheckTimeEdited = null;
+        $scope.evtCheckTypeEdited = null;
+        $scope.selectedEvtId = null;
+    }
     
     
     function registerCheck (){
