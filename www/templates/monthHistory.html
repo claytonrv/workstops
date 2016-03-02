@@ -55,11 +55,13 @@
                         <tr>
                             <th>Event</th>
                             <th>Time</th>
+                            <th></th>
                         </tr>
                         <tr
                         ng-repeat="evt in selectedDay.evts">
                             <td>{{evt.type}}</td>
                             <td>{{evt.check}}</td>
+                            <td><a ng-if="$last && (selectedDay.evts.length > 2)" class="edit-link"><img ng-click="removeEvt(selectedDay)" class="edit-image" src="img/remove.png" alt="remove" /></a></td>
                         </tr>
                     </table>
                 </div>

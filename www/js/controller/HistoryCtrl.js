@@ -2,12 +2,13 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     
     init();
     
-    $interval(10000, verifyMonthUpdates);
+    $interval(6000, verifyMonthUpdates);
     
     function init(){
         $scope.eventsToShow = false;
         $scope.noWorkload = false;
         $scope.showDayEdit = false;
+        apiCheck.updateMonthEvts();
         getMonthDays();
         getMonthName();
     };
@@ -71,7 +72,20 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
       }
     };
     
+    $scope.removeEvt = function(selectedDay){
+        $scope.actualMonth.days.forEach(function(day){
+           if(day.day == selectedDay.day){
+               if(day.evts.length >= 2){
+                   day.evts.pop();
+               }
+           } 
+        });
+        $localstorage.setObject("actualMonth", $scope.actualMonth);
+        init();
+    };
+    
     $scope.editDayEvents = function(day){
+      apiCheck.updateMonthEvts();
       $scope.workloadSelected();
       if(!$scope.noWorkload){
           init();

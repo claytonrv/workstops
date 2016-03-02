@@ -28,6 +28,19 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         apiMonths.monthUpdated();
     }; 
     
+    this.removeLastEvent = function(){
+        var today = $localstorage.getObject("today");
+        if(today.evts.length >= 1){
+            today.evts.pop();
+        }
+        $localstorage.setObject("today", today);
+        return today;
+    };
+    
+    this.updateMonthEvts = function(){
+        updateDailyEventsOnMonth();
+    };
+    
     function verifyIfNewDay(){
         var newDay = new Date();
         var lastRegisteredDay = $localstorage.getObject("today");
@@ -82,7 +95,24 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
             verifyIfNewMonth();
             actualMonth = $localstorage.getObject('actualMonth');
         }
-        actualMonth.days.push(day);
+        var dayOnMonth = false;
+        var today;
+        actualMonth.days.forEach(function(mDay){
+           if(mDay.day == day.day){
+               dayOnMonth = true;
+           } 
+        });
+        if(!dayOnMonth){
+            actualMonth.days.push(day);
+        }else {
+            for(var i=0; i<actualMonth.days.length; i++){
+                if(actualMonth.days[i].day == day.day){
+                    actualMonth.days[i] = day;
+                    today = day;
+                }
+            }
+            $localstorage.setObject("today", today);
+        }
         $localstorage.setObject("actualMonth", actualMonth);
     };
     
@@ -97,6 +127,10 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
                         for (var i = 0; i < today.evts.length; i++) {
                             if (today.evts[i] && selectedDay.evts[i] && today.evts[i].type != selectedDay.evts[i].type && today.evts[i].check != selectedDay.evts[i].check || !selectedDay.evts[i]) {
                                 selectedDay.evts[i] = today.evts[i];
+                            }else if(today.evts[i] && selectedDay.evts[i] && today.evts[i].check != selectedDay.evts[i].check){
+                                selectedDay.evts[i].check = today.evts[i].check;
+                            }else if(selectedDay[i] && !today[i]){
+                                selectedDay = today;
                             }
                         }
                     }

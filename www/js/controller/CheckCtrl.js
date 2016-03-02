@@ -43,12 +43,8 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         }
     };
     
-    $scope.removeEvt = function(evtId){
-        var today = $localstorage.getObject("today");
-        if(today.evts.length >= 1){
-            today.evts.pop();
-        }
-        $localstorage.setObject("today", today);
+    $scope.removeEvt = function(){
+        var today = apiCheck.removeLastEvent();
         var lastIndex = today.evts.pop();
         if($localstorage.isEmpty(lastIndex)){
             $localstorage.setObject("laststate","");
@@ -56,6 +52,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
          $localstorage.setObject("laststate",lastIndex.type);   
         }
         init();
+        apiCheck.updateMonthEvts();
     };
     
     $scope.saveEdit = function (evtId){
@@ -76,6 +73,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         $localstorage.setObject('today', today);
         clearEditVariables();
         init();
+        apiCheck.updateMonthEvts();
     };
     
     function clearEditVariables(){
