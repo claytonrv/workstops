@@ -120,8 +120,8 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
     function updateDailyEventsOnMonth() {
         var today = $localstorage.getObject('today');
         var month = $localstorage.getObject('actualMonth');
-        if (!$localstorage.isEmpty(month.days)) {
-            if (!$localstorage.isEmpty(today.evts)) {
+        if (month && month.days && !$localstorage.isEmpty(month.days)) {
+            if (today && today.evts && !$localstorage.isEmpty(today.evts)) {
                 month.days.forEach(function (selectedDay) {
                     if (today.day == selectedDay.day) {
                         for (var i = 0; i < today.evts.length; i++) {
@@ -137,7 +137,9 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
                 });
             }
         } else {
-            month.days.push(today);
+            if(month && month.days && today){
+                month.days.push(today);   
+            }
         }
         if (month && month.days) {
             $localstorage.setObject('actualMonth', month);
@@ -211,11 +213,15 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         if (!$localstorage.isEmpty(configs) && configs.workload != '' && configs.workload != null && configs.workload != 'undefined') {
             workload = addZero(configs.workload) + ":00";
         }
-        if (workload && workedHours) {
-            if (greaterThan(workedHours, workload)) {
-                hours = 'EXTRA_HOURS';
+        if (workload) {
+            if (workedHours) {
+                if (greaterThan(workedHours, workload)) {
+                    hours = 'EXTRA_HOURS';
+                } else {
+                    hours = 'FALT_HOURS';
+                }
             } else {
-                hours = 'FALT_HOURS';
+                hours = 'NO_WORKED_HOURS';
             }
         } else {
             hours = 'NO_WORKLOAD';
@@ -244,7 +250,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
     this.calculateTotalWorkedTimeInDay = function(day){
         var firstCheck;
         var lastCheck;
-        day.workedHours = "";
+        day.workedHours = "00:00";
         if (day.evts) {
             for (var i = 0; i < day.evts.length; i++) {
                 if (day.evts[i].type == "CHECKIN") {

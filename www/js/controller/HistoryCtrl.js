@@ -2,10 +2,11 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     
     init();
     
-    $interval(6000, verifyMonthUpdates);
+    $interval(10, verifyMonthUpdates);
+    var eventsToShow;
     
     function init(){
-        $scope.eventsToShow = false;
+        eventsToShow = noEventsOnMonth();
         $scope.noWorkload = false;
         $scope.showDayEdit = false;
         apiCheck.updateMonthEvts();
@@ -27,6 +28,11 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
                 var hoursType = apiCheck.verifyHoursType(day);
                 if(hoursType == 'NO_WORKLOAD'){
                     $scope.noWorkload = true;
+                }else if(hoursType == 'NO_WORKED_HOURS'){
+                    day.extraHours = "00:00";
+                    day.falthours = "00:00";
+                    day.workedHours = "00:00"
+                    $scope.noWorkload = false;
                 }else if(hoursType == 'EXTRA_HOURS'){
                     var extraHours = apiCheck.calculateDifferenceHours(day,'EXTRA');
                     day.extraHours = extraHours;
@@ -46,14 +52,28 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     function getMonthName(){
         if($scope.actualMonth){
             $scope.monthName = apiMonths.verifyMonthName($scope.actualMonth.month);
-            $scope.eventsToShow = false;            
+            eventsToShow = true;            
         }else {
-         $scope.eventsToShow = false;  
-         $scope.msg = 'Nothing to be shown now ...';
+            eventsToShow = false;  
+         $scope.msg = 'Nothing to be shown yet ...';
          setTimeout(function(){
             $scope.changeRoute("#/app/home", true);
         },3000);
         }
+    };
+    
+    function noEventsOnMonth(){
+        getActualMonth();
+        if ($scope.actualMonth && $scope.actualMonth.days) {
+            eventsToShow = false;
+        } else {
+            eventsToShow = true;
+        }   
+    };
+    
+    $scope.noEventsToShow = function(){
+        noEventsOnMonth();
+        return eventsToShow;
     };
     
     $scope.workloadSelected = function (){

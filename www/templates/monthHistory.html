@@ -1,6 +1,6 @@
-<ion-view view-title="Month Events History">
+<ion-view view-title="Month Events History" hide-back-button="true">
     <ion-content>
-        <div id='errorMsg' ng-show='!eventsToShow'>
+        <div id='errorMsg' ng-show='noEventsToShow()'>
             <div class='row'>
                 <div class='col col-100'>
                     <h1 class="page-title" >{{msg}}</h1>
@@ -24,7 +24,7 @@
                         <tr ng-if="validMonth();"
                             ng-repeat="day in month">
                             <td>{{day.day}}</td>
-                            <td><button class="button button-block medium-button" 
+                            <td><button ng-disabled="day.evts.length < 1" class="button button-block medium-button" 
                                         ng-click="editDayEvents(day)">
                                     View
                                 </button>
@@ -74,7 +74,7 @@
             <ion-content scroll="false" class="modal-text">
                 <div class="row">
                     <div class="col col-80">
-                        <span>{{message}}</span>
+                        <span>you haven't selected a workload yet!</span>
                     </div>
                     <div class="col col-20">
                         <img class="modal-image" src="img/alert.png" alt="alert" />
