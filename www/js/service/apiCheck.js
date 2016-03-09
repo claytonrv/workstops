@@ -67,7 +67,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         }   
         verifyIfNewMonth();
     };
-    
+
     function verifyIfNewMonth(){
         var newMonth = new Date();
         var actualMonth = $localstorage.getObject("actualMonth");

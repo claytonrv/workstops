@@ -71,6 +71,10 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
         }   
     };
     
+    function clearEditVariables(){
+      $scope.selectedEvtId = null;  
+    };
+    
     $scope.noEventsToShow = function(){
         noEventsOnMonth();
         return eventsToShow;
@@ -92,13 +96,46 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
       }
     };
     
+    $scope.onEdit = function (evtId){
+        $scope.selectedEvtId = evtId;
+    };
+    
+    $scope.editing = function(evtId){
+        if($scope.selectedEvtId && evtId == $scope.selectedEvtId){
+            return true;
+        }else {
+            return false;
+        } 
+    };
+    
+    $scope.saveEdit = function (evtId, selectedDay){
+        var editedCheck;
+        selectedDay.evts.forEach(function(evt){
+           if(evt.id == evtId){
+               editedCheck = evt.check;
+           } 
+        });
+        $scope.actualMonth.days.forEach(function (day) {
+            if (day.day == selectedDay.day) {
+                day.evts.forEach(function (evt) {
+                    if (evt.id == evtId) {
+                        if (editedCheck) {
+                            evt.check = editedCheck;
+                        }
+                    }
+                });
+            }
+        });
+        $localstorage.setObject("actualMonth", $scope.actualMonth);
+        clearEditVariables();
+        init();
+    };
+    
     $scope.removeEvt = function(selectedDay){
         $scope.actualMonth.days.forEach(function(day){
-           if(day.day == selectedDay.day){
-               if(day.evts.length >= 2){
-                   day.evts.pop();
-               }
-           } 
+            if (day.day == selectedDay.day) {
+                day.evts.pop();
+            } 
         });
         $localstorage.setObject("actualMonth", $scope.actualMonth);
         init();
@@ -119,6 +156,14 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
         $scope.selectedDay = "";
     };
     
+    $scope.selectedDayEqualsToday = function(selectedDay){
+        var today = $localstorage.getObject("today");
+        if(selectedDay && today && selectedDay.day == today.day){
+            return true;
+        }else {
+            return false;
+        }
+    };
     
     function verifyMonthUpdates (){
         init();
