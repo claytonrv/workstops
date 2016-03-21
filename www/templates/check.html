@@ -27,7 +27,7 @@
                           <tr ng-repeat="evt in today">
                               <td data-th="Check Type">{{evt.type}}</td>
                               <td data-th="Check Time" ng-if="!editing(evt.id)" >{{evt.check}}</td>
-                              <td data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id)"><input class="evt-input" ng-model="evt.check" /></td>
+                              <td data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id)"><input maxlength="5" ng-change="formatInput(evt.id, evt.check)" class="evt-input" ng-model="evt.check" /></td>
                               <td data-th="Edit Check" ng-if="!editing(evt.id)" ><a class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
                               <td data-th="Edit Check" ng-if="editing(evt.id)" ><a class="edit-link"><img ng-click="saveEdit(evt.id)" class="edit-image" src="img/save.png" alt="save" /></a></td>
                               <td data-th="Remove Check"><a ng-if="$last" class="edit-link"><img ng-click="removeEvt()" class="edit-image" src="img/remove.png" alt="remove" /></a></td>

@@ -103,7 +103,25 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             $localstorage.setObject("workedHours", actualDay.workedHours);
             $scope.workedHours = $localstorage.getObject("workedHours");
         }
-    }
+    };
+    
+    function seachCheckOnEvents(checkId, formatedValue){
+        $scope.today.forEach(function(event){
+            if(event.id == checkId){
+                event.check = formatedValue;
+            }
+        })
+    };
+    
+    $scope.formatInput = function (checkId, checkValue) {
+        var formatedValue;
+        if (checkValue.length > 2) {
+            if (checkValue.substring(2, 3) != ":") {
+                formatedValue = checkValue.substring(0, 2) + ":" + checkValue.substring(2, checkValue.length);
+                seachCheckOnEvents(checkId, formatedValue);
+            }
+        }
+    };
     
     
 });

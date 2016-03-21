@@ -201,4 +201,22 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
         }
     };
     
+    function seachCheckOnEvents(checkId, formatedValue){
+        $scope.selectedDay.evts.forEach(function(event){
+            if(event.id == checkId){
+                event.check = formatedValue;
+            }
+        })
+    };
+    
+    $scope.formatInput = function (checkId, checkValue) {
+        var formatedValue;
+        if (checkValue.length > 2) {
+            if (checkValue.substring(2, 3) != ":") {
+                formatedValue = checkValue.substring(0, 2) + ":" + checkValue.substring(2, checkValue.length);
+                seachCheckOnEvents(checkId, formatedValue);
+            }
+        }
+    };
+    
 });

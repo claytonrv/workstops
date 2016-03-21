@@ -103,4 +103,7 @@ a.edit-link{
     border-bottom: 2px solid gray;
     border-radius: 6px;
     text-align: center;
+    width: 70%;
+    font-weight: bold;
+    font-size: 100%;
 }
