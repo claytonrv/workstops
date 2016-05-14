@@ -2,37 +2,29 @@
   <ion-content>
       <div class="row">
           <div class="col col-100">
-              <h1 class="page-title">Worked hours : {{workedHours}}</h1>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col col-100">
-              <button class="button button-calm large-button" ng-if="!checkin" ng-click="check()">
+              <h2 class="page-title">Worked hours : {{workedHours}}</h2>
+              <button class="button large-button" ng-if="!checkin" ng-click="check()">
                   Check-in
               </button>
-              <button class="button button-calm large-button" ng-if="checkin" ng-click="check()">
+              <button class="button large-button" ng-if="checkin" ng-click="check()">
                   Check-out
               </button>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col col-100">
-                  <table class="flat-table">
-                          <tr>
-                              <th>Event</th>
-                              <th>Time</th>
-                              <th></th>
-                              <th></th>
-                          </tr>
-                          <tr ng-repeat="evt in today">
-                              <td data-th="Check Type">{{evt.type}}</td>
-                              <td data-th="Check Time" ng-if="!editing(evt.id)" >{{evt.check}}</td>
-                              <td data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id)"><input maxlength="5" ng-change="formatInput(evt.id, evt.check)" class="evt-input" ng-model="evt.check" /></td>
-                              <td data-th="Edit Check" ng-if="!editing(evt.id)" ><a class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
-                              <td data-th="Edit Check" ng-if="editing(evt.id)" ><a class="edit-link"><img ng-click="saveEdit(evt.id)" class="edit-image" src="img/save.png" alt="save" /></a></td>
-                              <td data-th="Remove Check"><a ng-if="$last" class="edit-link"><img ng-click="removeEvt()" class="edit-image" src="img/remove.png" alt="remove" /></a></td>
-                          </tr>
-                  </table>
+              <table class="flat-table">
+                <tr>
+                    <th>Event</th>
+                    <th>Time</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="evt in today">
+                    <td data-th="Check Type">{{evt.type}}</td>
+                    <td data-th="Check Time" ng-if="!editing(evt.id)" >{{evt.check}}</td>
+                    <td data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id)"><input maxlength="5" ng-change="formatInput(evt.id, evt.check)" class="evt-input" ng-model="evt.check" /></td>
+                    <td data-th="Edit Check" ng-if="!editing(evt.id)" ><a class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
+                    <td data-th="Edit Check" ng-if="editing(evt.id)" ><a class="edit-link"><img ng-click="saveEdit(evt.id)" class="edit-image" src="img/save.png" alt="save" /></a></td>
+                    <td data-th="Remove Check"><a ng-if="$last" class="edit-link"><img ng-click="removeEvt()" class="edit-image" src="img/remove.png" alt="remove" /></a></td>
+                </tr>
+              </table>
           </div>
       </div>
   </ion-content>

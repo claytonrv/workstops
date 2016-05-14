@@ -24,7 +24,7 @@ angular.module("workstops").controller("SettingsCtrl", function($scope, $localst
     $scope.selectLastOption = function(){
       if(!$localstorage.isEmpty(lastChanged)){
         if(document.getElementById(lastChanged)){
-          document.getElementById(lastChanged).style.borderColor="#73AD21";
+          document.getElementById(lastChanged).style.borderColor="#66B2FF";
         } 
       }  
     };
@@ -62,7 +62,7 @@ angular.module("workstops").controller("SettingsCtrl", function($scope, $localst
         $scope.savedConfigurationModal.show();
         setTimeout(function(){
             $scope.closeModal();
-        },2000);
+        },10000);
     };
 
     $scope.closeModal = function() {

@@ -3,14 +3,14 @@
         <div id='errorMsg' ng-show='noEventsToShow()'>
             <div class='row'>
                 <div class='col col-100'>
-                    <h1 class="page-title" >{{msg}}</h1>
+                    <h2 class="page-title" >{{msg}}</h2>
                 </div>
             </div>
         </div>
         <div id="month-table-content" ng-show="!showDayEdit">
             <div class="row">
                 <div class="col col-100">
-                    <h1 class="page-title" >{{monthName}}</h1>
+                    <h2 class="page-title" >{{monthName}}</h2>
                 </div>
             </div>
             <div class="row">
@@ -37,20 +37,17 @@
         </div>
         <div id="monthday-content" ng-show="showDayEdit">
             <div class="row">
-                <div class="col-90" style="margin-left: 5%;">
-                    <button class="button large-button button-bar-inline" ng-click="unselectDay()">Return</button>
+                <div class="col-90" style="margin-left: 30%;">
+                    <button class="button small-button button-bar-inline" ng-click="unselectDay()">
+                    <h1>&larr;</h1></button>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-100">
-                    <h1 class="edition-title">{{monthName}} {{selectedDay.day}}</h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col col-100">
-                    <h3 class="page-title">Worked: {{selectedDay.workedHours}}</h3>
-                    <h3 class="page-title">Extra: {{selectedDay.extraHours}}</h3>
-                    <h3 class="page-title">Fault: {{selectedDay.falthours}}</h3>
+                    <h3 class="edition-title">{{monthName}} {{selectedDay.day}}</h3>
+                    <h4 class="page-text">Worked: {{selectedDay.workedHours}}</h4>
+                    <h4 class="page-text">Extra: {{selectedDay.extraHours}}</h4>
+                    <h4 class="page-text">Fault: {{selectedDay.falthours}}</h4>
                     <table class="flat-table">
                         <tr>
                             <th>Event</th>
@@ -78,7 +75,7 @@
             <ion-content scroll="false" class="modal-text">
                 <div class="row">
                     <div class="col col-80">
-                        <span>you haven't selected a workload yet!</span>
+                        <span>Select a workload first!</span>
                     </div>
                     <div class="col col-20">
                         <img class="modal-image" src="img/alert.png" alt="alert" />
