@@ -62,7 +62,7 @@ angular.module("workstops").controller("SettingsCtrl", function($scope, $localst
         $scope.savedConfigurationModal.show();
         setTimeout(function(){
             $scope.closeModal();
-        },10000);
+        }, 2000);
     };
 
     $scope.closeModal = function() {

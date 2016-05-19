@@ -76,6 +76,10 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         apiCheck.updateMonthEvts();
     };
     
+    $scope.cancelEdition = function(){
+        clearEditVariables();
+    };
+    
     function clearEditVariables(){
         $scope.evtCheckTimeEdited = null;
         $scope.evtCheckTypeEdited = null;

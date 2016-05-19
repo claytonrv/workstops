@@ -18,6 +18,18 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
       $scope.actualMonth = $localstorage.getObject("actualMonth");
     };
     
+    $scope.noExtraHours = function (day){
+        return day.extraHours == "00:00";
+    };
+    
+    $scope.noFaltHours = function (day){
+        return day.falthours == "00:00";
+    };
+    
+    $scope.cancelEdition = function(){
+        clearEditVariables();
+    };
+    
     function getMonthDays(){
         getActualMonth();
         $scope.month = [];
