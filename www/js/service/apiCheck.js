@@ -1,5 +1,5 @@
 angular.module("workstops").service("apiCheck", function($localstorage, apiMonths){
-    
+
     this.createEvent = function(eventType){
         var laststate = $localstorage.getObject("laststate");
         if($localstorage.isEmpty(laststate) || laststate == "CHECKOUT"){
@@ -8,12 +8,18 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         var date = new Date();
         var hr = addZero(date.getHours());
         var min = addZero(date.getMinutes());
+        var today = $localstorage.getObject("today");
+        var evtNumber = null;
+        if(!today || !today.evts){
+          evtNumber = 0;
+        }else {
+          evtNumber = today.evts.length
+        }
         var evt = {
             type: eventType,
             check: hr+":"+min,
-            id: eventType+"-"+hr+":"+min
+            id: evtNumber+eventType+"-"+hr+":"+min
         };
-        var today = $localstorage.getObject("today");
         if($localstorage.isEmpty(today)){
             var actualDay = new Date;
             today = {
@@ -26,8 +32,8 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         $localstorage.setObject("laststate", eventType);
         updateDailyEventsOnMonth();
         apiMonths.monthUpdated();
-    }; 
-    
+    };
+
     this.removeLastEvent = function(){
         var today = $localstorage.getObject("today");
         if(today.evts.length >= 1){
@@ -36,11 +42,11 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         $localstorage.setObject("today", today);
         return today;
     };
-    
+
     this.updateMonthEvts = function(){
         updateDailyEventsOnMonth();
     };
-    
+
     function verifyIfNewDay(){
         var newDay = new Date();
         var lastRegisteredDay = $localstorage.getObject("today");
@@ -64,7 +70,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
             lastRegisteredDay = today;
             $localstorage.setObject("today", lastRegisteredDay);
             pushDaysOnActualMonth(today);
-        }   
+        }
         verifyIfNewMonth();
     };
 
@@ -77,7 +83,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
                 days: []
             };
             $localstorage.setObject("actualMonth", month);
-        }else { 
+        }else {
             if(actualMonth.month != addZero((newMonth.getMonth()+1))){
                 $localstorage.setObject("lastMonth", actualMonth);
                 var nextMonth = {
@@ -88,7 +94,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
             }
         }
     };
-    
+
     function pushDaysOnActualMonth(day){
         var actualMonth = $localstorage.getObject("actualMonth");
         if($localstorage.isEmpty(actualMonth)){
@@ -100,7 +106,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         actualMonth.days.forEach(function(mDay){
            if(mDay.day == day.day){
                dayOnMonth = true;
-           } 
+           }
         });
         if(!dayOnMonth){
             actualMonth.days.push(day);
@@ -115,8 +121,8 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         }
         $localstorage.setObject("actualMonth", actualMonth);
     };
-    
-    
+
+
     function updateDailyEventsOnMonth() {
         var today = $localstorage.getObject('today');
         var month = $localstorage.getObject('actualMonth');
@@ -129,8 +135,8 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
                                 selectedDay.evts[i] = today.evts[i];
                             }else if(today.evts[i] && selectedDay.evts[i] && today.evts[i].check != selectedDay.evts[i].check){
                                 selectedDay.evts[i].check = today.evts[i].check;
-                            }else if(selectedDay[i] && !today[i]){
-                                selectedDay = today;
+                            }else if(i == today.evts.length-1 && (selectedDay.evts[i+1] && !today.evts[i+1])){
+                                selectedDay.evts = today.evts;
                             }
                         }
                     }
@@ -138,21 +144,21 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
             }
         } else {
             if(month && month.days && today){
-                month.days.push(today);   
+                month.days.push(today);
             }
         }
         if (month && month.days) {
             $localstorage.setObject('actualMonth', month);
         }
     };
-    
-    
+
+
     function greaterThan(firstValue, secondValue){
         firstHours = parseInt(firstValue.split(':')[0]);
         firstMinutes = parseInt(firstValue.split(':')[1]);
         secondHours = parseInt(secondValue.split(':')[0]);
         secondMinutes = parseInt(secondValue.split(':')[1]);
-        
+
         if(firstHours > secondHours){
             return true;
         }else if(firstHours == secondHours){
@@ -165,31 +171,31 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
             return false;
         }
     };
-    
+
     function calculateWorkedHours(firstCheck, lastCheck){
         var firstHour = parseInt(firstCheck.split(':')[0]);
         var firstMinute = parseInt(firstCheck.split(':')[1]);
         var first = new Date (0,0,0,firstHour,firstMinute,0);
-        
+
         var lastHour = parseInt(lastCheck.split(':')[0]);
         var lastMinute = parseInt(lastCheck.split(':')[1]);
         var last = new Date (0,0,0, lastHour, lastMinute, 0);
-        
+
         var diff = last.getTime() - first.getTime();
         var hours = Math.floor(diff /1000/60/60);
         diff -= hours * 1000 * 60 * 60;
         var minutes = Math.floor(diff / 1000 / 60);
-        
+
         if(hours < 0){
             hours = hours + 24;
         }
-        
+
         return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
     };
-    
+
     function incrementWorkedHours(workedHours, newRegister){
         var registeredTime = ((+workedHours.split(":")[0]) * 3600) + ((+workedHours.split(":")[1]) * 60);
-        
+
         var newTimeRegister = ((+newRegister.split(":")[0]) * 60 * 60) + ((+newRegister.split(":")[1]) * 60);
 
         var totalseconds = parseInt(registeredTime,10) + parseInt(newTimeRegister,10);
@@ -204,8 +210,8 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         var totalWorkedHours = hours+":"+minutes;
         return totalWorkedHours;
     };
-    
-    
+
+
     this.verifyHoursType = function (day) {
         var workedHours = day.workedHours;
         var configs = $localstorage.getObject('configs');
@@ -228,7 +234,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         }
         return hours;
     };
-    
+
     this.calculateDifferenceHours = function (day, type){
       var workedTime = day.workedHours;
       var configs = $localstorage.getObject('configs');
@@ -237,16 +243,16 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
       if(!$localstorage.isEmpty(configs) && configs.workload != '' && configs.workload != null && configs.workload != 'undefined'){
         workload = addZero(configs.workload)+":00";
         if(type == 'EXTRA'){
-            hours = calculateWorkedHours(workload, workedTime);   
-        }else { 
-            hours = calculateWorkedHours(workedTime, workload);      
+            hours = calculateWorkedHours(workload, workedTime);
+        }else {
+            hours = calculateWorkedHours(workedTime, workload);
         }
       }else {
           hours = 'NO_WORKLOAD';
       }
       return hours;
     };
-    
+
     this.calculateTotalWorkedTimeInDay = function(day){
         var firstCheck;
         var lastCheck;
@@ -268,7 +274,11 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         }
         return day.workedHours;
     };
-    
+
+    this.addZero = function(i){
+      return addZero(i);
+    }
+
     function addZero(i) {
         if (i < 10) {
             i = "0" + i;
@@ -276,4 +286,3 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         return i;
     };
 });
-

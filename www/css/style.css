@@ -40,7 +40,7 @@
 
 .page-title {
     width: 100%;
-    margin-top: 5%; 
+    margin-top: 5%;
     text-align: center;
 }
 
@@ -50,8 +50,8 @@
     text-align: center;
 }
 
-.edition-title { 
-    margin-top: 3% !important; 
+.edition-title {
+    margin-top: 3% !important;
     text-align: center;
     font-weight: bold;
 }
@@ -86,9 +86,9 @@
 }
 
 .modal {
-    min-height: 45px; 
-    max-height: 45px;
-    border:ridge;
+    height: 100%;
+    background-color: gray;
+    border: inset;
     border-radius: 30px;
     border-color:rgb(220, 220, 220);
     background-color: #f8f8f8;

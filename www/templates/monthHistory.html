@@ -14,22 +14,57 @@
                 </div>
             </div>
             <div class="row">
+              <div class="col col-100">
+                <button ng-if="noDaysOnMonth()" class="button button-block medium-button"
+                            ng-click="convertToCSV('monthTable')">Download to CSV</button>
+              </div>
+            </div>
+            <div style="display:none" class="row">
+              <div class="col col-100">
+                <table id="monthTable" class="flat-table">
+                  <tr>
+                    <th>Day</th>
+                    <th>Checkin</th>
+                    <th>Checkout</th>
+                    <th>Checkin</th>
+                    <th>Checkout</th>
+                    <th>Worked</th>
+                    <th>Extra</th>
+                    <th>Fault</th>
+                  </tr>
+                  <tr ng-repeat="day in month">
+                    <td>{{day.day}}</td>
+                    <td ng-repeat="evt in day.evts">{{evt.check}}</td>
+                    <td>{{day.workedHours}}</td>
+                    <td>{{day.extraHours}}</td>
+                    <td>{{day.falthours}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="row">
                 <div class="col col-100">
                     <table class="flat-table extended-table">
                         <tr>
                             <th>Day</th>
                             <th>Events</th>
-    <!--                        <th>Left hours</th>-->
+                            <th>
+                              <a>
+                                <img ng-click="addNewDay()" style="width: 35px;height: 30px;" src="img/add.png" />
+                              </a>
+                            </th>
                         </tr>
                         <tr ng-if="validMonth();"
                             ng-repeat="day in month">
                             <td>{{day.day}}</td>
-                            <td><button ng-disabled="day.evts.length < 1" class="button button-block medium-button" 
+                            <td><button ng-disabled="day.evts.length < 1" class="button button-block medium-button"
                                         ng-click="editDayEvents(day)">
                                     View
                                 </button>
                             </td>
-    <!--                        <td></td>-->
+                           <td>
+                             <a class="edit-link"><img ng-click="removeDay(day)" class="edit-image" src="img/remove.png" alt="remove" /></a>
+                           </td>
                         </tr>
                     </table>
                 </div>
@@ -61,7 +96,7 @@
                             <td ng-if="!editing(evt.id)">{{evt.check}}</td>
                             <td style="width:136px; height: 19.500px" data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id) && !selectedDayEqualsToday(selectedDay)"><input maxlength="5" ng-change="formatInput(evt.id, evt.check)" class="evt-input" ng-model="evt.check" /></td>
                             <td data-th="Edit Check" ng-if="!editing(evt.id) && !selectedDayEqualsToday(selectedDay)" ><a class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
-                            <td data-th="Edit Check" ng-if="editing(evt.id) && !selectedDayEqualsToday(selectedDay)" ><a class="edit-link"><img ng-click="saveEdit(evt.id, selectedDay)" class="edit-image" src="img/save.png" alt="save" /></a></td>  
+                            <td data-th="Edit Check" ng-if="editing(evt.id) && !selectedDayEqualsToday(selectedDay)" ><a class="edit-link"><img ng-click="saveEdit(evt.id, selectedDay)" class="edit-image" src="img/save.png" alt="save" /></a></td>
                             <td>
                                 <a class="edit-link" ng-if="editing(evt.id)"><img ng-click="cancelEdition()" class="edit-image" src="img/cancel.png" alt="cancel" /></a>
                                 <a class="edit-link" ng-if="!editing(evt.id)"><img ng-click="removeEvt(selectedDay)" class="edit-image" src="img/remove.png" alt="remove" /></a>
@@ -72,20 +107,60 @@
             </div>
         </div>
     </ion-content>
-    
-    <script id="unselectedWorkload.html" type="text/ng-template">
+
+    <script id="addNewDay.html" type="text/ng-template">
         <div class="modal">
             <ion-content scroll="false" class="modal-text">
+              <div style="margin-top:25%">
                 <div class="row">
-                    <div class="col col-80">
-                        <span>Select a workload first!</span>
-                    </div>
-                    <div class="col col-20">
-                        <img class="modal-image" src="img/alert.png" alt="alert" />
+                  <div class="col col-33">
+                    <h5>Insert day:</h5>
+                  </div>
+                  <div clas="col col-77">
+                    <input maxlength="2" class="evt-input" ng-model="newDay.day" />
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col col-33">
+                    <h5>Start time:</h5>
+                  </div>
+                  <div clas="col col-77">
+                    <input maxlength="5" ng-change="formatInput(newDay.firstCheckin, 'firstCheckin')" class="evt-input" ng-model="newDay.firstCheckin" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-33">
+                    <h5>Lunch time:</h5>
+                  </div>
+                  <div clas="col col-77">
+                    <input maxlength="5" ng-change="formatInput(newDay.firstCheckout, 'firstCheckout')" class="evt-input" ng-model="newDay.firstCheckout" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-33">
+                    <h5>Return time:</h5>
+                  </div>
+                  <div clas="col col-77">
+                    <input maxlength="5" ng-change="formatInput(newDay.lastCheckin, 'lastCheckin')" class="evt-input" ng-model="newDay.lastCheckin" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-33">
+                    <h5>Exit time:</h5>
+                  </div>
+                    <div clas="col col-77">
+                      <input maxlength="5" ng-change="formatInput(newDay.lastCheckout, 'lastCheckout')" class="evt-input" ng-model="newDay.lastCheckout" />
                     </div>
                 </div>
+                <div class="row">
+                  <div class="col col-100">
+                    <button ng-click="saveNewDay()">Adicionar novo dia</button>
+                  </div>
+                </div>
+              </div>
             </ion-content>
         </div>
     </script>
-    
+
 </ion-view>

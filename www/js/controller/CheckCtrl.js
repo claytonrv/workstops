@@ -1,9 +1,9 @@
 angular.module("workstops").controller("CheckCtrl", function($scope, $localstorage, apiCheck){
-        
+
     $scope.checkin;
-    
+
     init();
-    
+
     function init(){
         getActualDay();
         clearEditVariables();
@@ -12,12 +12,12 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             getWorkedHours(actualDay);
         }
         if(!$localstorage.isEmpty($localstorage.getObject("laststate")) && $localstorage.getObject("laststate") == "CHECKIN"){
-            $scope.checkin = true;    
+            $scope.checkin = true;
         }else {
-            $scope.checkin = false;    
+            $scope.checkin = false;
         }
     };
-    
+
     function getActualDay(){
         var today = $localstorage.getObject("today");
         $scope.workedHours = $localstorage.getObject("workedHours");
@@ -25,16 +25,16 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             $scope.today = today.evts;
         }
     }
-    
+
     $scope.check = function(){
         $scope.checkin = !$scope.checkin;
         registerCheck();
     };
-    
+
     $scope.onEdit = function (evtId){
         $scope.selectedEvtId = evtId;
     };
-    
+
     $scope.editing = function(evtId){
         if($scope.selectedEvtId && evtId == $scope.selectedEvtId){
             return true;
@@ -42,26 +42,26 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             return false;
         }
     };
-    
+
     $scope.removeEvt = function(){
         var today = apiCheck.removeLastEvent();
         var lastIndex = today.evts.pop();
         if($localstorage.isEmpty(lastIndex)){
             $localstorage.setObject("laststate","");
         }else{
-         $localstorage.setObject("laststate",lastIndex.type);   
+         $localstorage.setObject("laststate",lastIndex.type);
         }
         init();
         apiCheck.updateMonthEvts();
     };
-    
+
     $scope.saveEdit = function (evtId){
         var today = $localstorage.getObject('today');
         var editedCheck;
         $scope.today.forEach(function(evt){
            if(evt.id == evtId){
                editedCheck = evt.check;
-           } 
+           }
         });
         today.evts.forEach(function (evt){
             if(evt.id == evtId){
@@ -75,18 +75,18 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         init();
         apiCheck.updateMonthEvts();
     };
-    
+
     $scope.cancelEdition = function(){
         clearEditVariables();
     };
-    
+
     function clearEditVariables(){
         $scope.evtCheckTimeEdited = null;
         $scope.evtCheckTypeEdited = null;
         $scope.selectedEvtId = null;
     }
-    
-    
+
+
     function registerCheck (){
         if($scope.checkin){
             apiCheck.createEvent("CHECKIN");
@@ -98,8 +98,8 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         }
         getActualDay();
     };
-        
-    
+
+
     function getWorkedHours(actualDay){
         if(!$localstorage.isEmpty(actualDay)){
             actualDay.workedHours = apiCheck.calculateTotalWorkedTimeInDay(actualDay);
@@ -108,7 +108,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             $scope.workedHours = $localstorage.getObject("workedHours");
         }
     };
-    
+
     function seachCheckOnEvents(checkId, formatedValue){
         $scope.today.forEach(function(event){
             if(event.id == checkId){
@@ -116,7 +116,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             }
         })
     };
-    
+
     $scope.formatInput = function (checkId, checkValue) {
         var formatedValue;
         if (checkValue.length > 2) {
@@ -126,8 +126,15 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
             }
         }
     };
-    
-    
+
+    $scope.maxDayEvents = function(){
+      var today = $localstorage.getObject('today');
+      var day = new Date();
+      if((today && today.day == apiCheck.addZero(day.getDate())) && $scope.today.length >= 4){
+        return true;
+      }else {
+        return false;
+      }
+    }
+
 });
-
-

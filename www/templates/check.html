@@ -3,10 +3,10 @@
       <div class="row">
           <div class="col col-100">
               <h2 class="page-title">Worked hours : {{workedHours}}</h2>
-              <button class="button large-button" ng-if="!checkin" ng-click="check()">
+              <button ng-disabled="maxDayEvents()" class="button large-button" ng-if="!checkin" ng-click="check()">
                   Check-in
               </button>
-              <button class="button large-button" ng-if="checkin" ng-click="check()">
+              <button ng-disabled="maxDayEvents()" class="button large-button" ng-if="checkin" ng-click="check()">
                   Check-out
               </button>
               <table class="flat-table">
