@@ -128,3 +128,16 @@ a.edit-link{
     font-weight: bold;
     font-size: 100%;
 }
+
+.new-evt-input {
+  background-color: white;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 2px solid gray;
+  border-radius: 6px;
+  text-align: center;
+  width: 70%;
+  font-weight: bold;
+  font-size: 100%;
+}

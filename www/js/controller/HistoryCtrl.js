@@ -336,44 +336,71 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     $scope.addNewDay = function(){
       $scope.newDay = {
         day: "",
-        firstCheckin: "",
-        firstCheckout: "",
-        lastCheckin: "",
-        lastCheckout: ""
+        firstCheckin: null,
+        firstCheckout: null,
+        lastCheckin: null,
+        lastCheckout: null
       }
       $scope.openModal();
     };
 
 
     $scope.saveNewDay = function(){
-      var dayToSave = {
-        day: $scope.newDay.day,
-        evts:[
-          {
+        var dayToSave = {
+          day: $scope.newDay.day,
+          evts:[]
+        }
+        if($scope.newDay.firstCheckin){
+          dayToSave.evts.push({
             type: 'CHECKIN',
             check: $scope.newDay.firstCheckin,
             id: '0CHECKIN-'+$scope.newDay.firstCheckin
-          },
-          {
+          });
+        }
+        if($scope.newDay.firstCheckout){
+          dayToSave.evts.push({
             type: 'CHECKOUT',
             check: $scope.newDay.firstCheckout,
             id: '1CHECKOUT-'+$scope.newDay.firstCheckout
-          },
-          {
+          });
+        }
+        if($scope.newDay.lastCheckin){
+          dayToSave.evts.push({
             type: 'CHECKIN',
             check: $scope.newDay.lastCheckin,
             id: '2CHECKIN-'+$scope.newDay.lastCheckin
-          },
-          {
+          });
+        }
+        if($scope.newDay.lastCheckout){
+          dayToSave.evts.push({
             type: 'CHECKOUT',
             check: $scope.newDay.lastCheckout,
             id: '3CHECKOUT-'+$scope.newDay.lastCheckout
-          }
-        ]
-      }
-      dayToSave.workedHours = apiCheck.calculateTotalWorkedTimeInDay(dayToSave);
-      uploadDayOnMonth(dayToSave);
+          });
+        }
+        dayToSave.workedHours = apiCheck.calculateTotalWorkedTimeInDay(dayToSave);
+        uploadDayOnMonth(dayToSave);
       $scope.closeModal();
     };
+
+    $scope.validNewDay = function(){
+        if($scope.newDay.lastCheckout != null && $scope.newDay.lastCheckout != '' && !$localstorage.isEmpty($scope.newDay.lastCheckout)
+            && !$scope.dayIsOnMonth($scope.newDay.day)){
+          return true;
+        }else {
+          return false;
+        }
+    }
+
+    $scope.dayIsOnMonth = function(){
+      var monthDays = $localstorage.getObject('actualMonth').days;
+      var isOnMonth = false;
+      monthDays.forEach(function(day){
+          if(day.day == $scope.newDay.day){
+            isOnMonth = true;
+          }
+      });
+      return isOnMonth;
+    }
 
 });
