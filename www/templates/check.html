@@ -1,7 +1,7 @@
 <ion-view view-title="Work Stops" hide-back-button="true">
   <ion-content>
       <div class="row">
-          <div class="col col-100">
+          <div class="col col-100" style="height:100%">
               <h2 class="page-title">Worked hours : {{workedHours}}</h2>
               <button ng-disabled="maxDayEvents()" class="button large-button" ng-if="!checkin" ng-click="check()">
                   Check-in
@@ -29,6 +29,16 @@
                 </tr>
               </table>
           </div>
+      </div>
+      <div class="row">
+        <div class="col col-100" style="width:100%">
+            <input type="text" style="width:100%; text-align:center" placeholder="Use this section to comment something." ng-model="actualDay.comments" maxlength="500" />            
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-100">
+          <button style="margin-left: 15% !important;" class="button medium-button" ng-click="saveCommentOnday()">Save comment</button>
+        </div>
       </div>
   </ion-content>
 </ion-view>

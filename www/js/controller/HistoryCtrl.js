@@ -232,6 +232,20 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
       init();
     };
 
+    $ionicModal.fromTemplateUrl('addNewCheck.html', {
+      scope: $scope, animation: 'slide-in-up'
+    }).then(function(modal){
+      $scope.addNewCheckModal = modal;
+    });
+
+    $scope.openNewCheckModal = function(){
+      $scope.addNewCheckModal.show();
+    };
+
+    $scope.closeNewCheckModal = function(){
+      $scope.addNewCheckModal.hide();
+    }
+
     $ionicModal.fromTemplateUrl('addNewDay.html', {
         scope: $scope, animation: 'slide-in-up'
         }).then(function(modal) {
@@ -312,6 +326,8 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
         var myLink = document.createElement('a');
         myLink.download = archivename;
         myLink.href = "data:application/csv," +escape(data);
+        myLink.style="display:none"
+        document.getElementById("csvExport").appendChild(myLink);
         myLink.click();
     }
 
@@ -328,7 +344,20 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
                   $scope.newDay.lastCheckin = formatedValue;
               }else if(id == 'lastCheckout'){
                   $scope.newDay.lastCheckout = formatedValue;
+              } else {
+                if($scope.selectedDay && $scope.selectedDay.evts){
+                  if( id == '0newCheckin'){
+                    $scope.selectedDay.evts[0].check = formatedValue;
+                  } else if( id == '1newCheckin'){
+                    $scope.selectedDay.evts[1].check = formatedValue;
+                  } else if( id == '2newCheckin'){
+                    $scope.selectedDay.evts[2].check = formatedValue;
+                  } else if( id == '3newCheckin'){
+                    $scope.selectedDay.evts[3].check = formatedValue;
+                  }
+                }
               }
+
           }
       }
     };
@@ -343,6 +372,41 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
       }
       $scope.openModal();
     };
+
+    $scope.addNewCheck = function(){
+      $scope.openNewCheckModal();
+      $scope.selectedDayOfMonth = $scope.selectedDay;
+    }
+
+    $scope.saveNewCheck = function (){
+      for(var i=0; i<4; i++){
+        var type = i/2 == 0 ? 'CHECKIN' : 'CHECKOUT';
+        if($scope.selectedDayOfMonth.evts[i].check){
+          if(!$scope.selectedDayOfMonth.evts[i].type){
+            $scope.selectedDayOfMonth.evts[i].type = type;
+          }
+          if(!$scope.selectedDayOfMonth.evts[i].id){
+            $scope.selectedDayOfMonth.evts[i].id = i+$scope.selectedDayOfMonth.evts[i].type+"-"+$scope.selectedDayOfMonth.evts[i].check;
+          }
+        }
+      }
+      $scope.actualMonth.days.forEach(function (day) {
+          if (day.day == $scope.selectedDayOfMonth.day) {
+            if(day.evts && $scope.selectedDayOfMonth.evts){
+              for(var i=0; i<4; i++){
+                if(day.evts[i] != $scope.selectedDayOfMonth.evts[i] || !day.evts[i]){
+                  day.evts[i] = $scope.selectedDayOfMonth.evts[i];
+                }
+              }
+            }
+          }
+        });
+        if($scope.actualMonth){
+          $localstorage.setObject('actualMonth',$scope.actualMonth);
+        }
+        init();
+        $scope.closeNewCheckModal();
+    }
 
 
     $scope.saveNewDay = function(){
@@ -384,7 +448,7 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     };
 
     $scope.validNewDay = function(){
-        if($scope.newDay.lastCheckout != null && $scope.newDay.lastCheckout != '' && !$localstorage.isEmpty($scope.newDay.lastCheckout)
+        if($scope.newDay && $scope.newDay.lastCheckout && !$localstorage.isEmpty($scope.newDay.lastCheckout)
             && !$scope.dayIsOnMonth($scope.newDay.day)){
           return true;
         }else {
@@ -393,13 +457,15 @@ angular.module("workstops").controller("HistoryCtrl", function($scope, $location
     }
 
     $scope.dayIsOnMonth = function(){
-      var monthDays = $localstorage.getObject('actualMonth').days;
+      var month = $localstorage.getObject('actualMonth');
       var isOnMonth = false;
-      monthDays.forEach(function(day){
-          if(day.day == $scope.newDay.day){
-            isOnMonth = true;
-          }
-      });
+      if(month && month.days){
+        month.days.forEach(function(day){
+            if(day && $scope.newDay && day.day == $scope.newDay.day){
+              isOnMonth = true;
+            }
+        });
+      }
       return isOnMonth;
     }
 

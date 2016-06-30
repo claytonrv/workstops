@@ -144,6 +144,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
                                 selectedDay.evts = today.evts;
                             }
                         }
+                        selectedDay.comments = today.comments;
                     }
                 });
             }

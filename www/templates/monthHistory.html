@@ -13,10 +13,9 @@
                     <h2 class="page-title" >{{monthName}}</h2>
                 </div>
             </div>
-            <div class="row">
-              <div class="col col-100">
-                <button ng-if="noDaysOnMonth()" class="button button-block medium-button"
-                            ng-click="convertToCSV('monthTable')">Download to CSV</button>
+            <div class="row" data-tap-disabled="true">
+              <div id="csvExport"  class="col col-100">
+                <button ng-if="noDaysOnMonth()" ng-click="convertToCSV('monthTable')" class="button button-block medium-button">Download CSV</button>
               </div>
             </div>
             <div style="display:none" class="row">
@@ -31,6 +30,7 @@
                     <th>Worked</th>
                     <th>Extra</th>
                     <th>Fault</th>
+                    <th>Comments</th>
                   </tr>
                   <tr ng-repeat="day in month">
                     <td>{{day.day}}</td>
@@ -38,6 +38,7 @@
                     <td>{{day.workedHours}}</td>
                     <td>{{day.extraHours}}</td>
                     <td>{{day.falthours}}</td>
+                    <td>{{day.comments}}</td>
                   </tr>
                 </table>
               </div>
@@ -88,14 +89,18 @@
                             <th>Event</th>
                             <th>Time</th>
                             <th></th>
-                            <th></th>
+                            <th>
+                              <a>
+                                <img ng-click="addNewCheck()" style="width: 35px;height: 30px;" src="img/add.png" />
+                              </a>
+                            </th>
                         </tr>
                         <tr
                         ng-repeat="evt in selectedDay.evts">
                             <td>{{evt.type}}</td>
                             <td ng-if="!editing(evt.id)">{{evt.check}}</td>
                             <td style="width:136px; height: 19.500px" data-th="Edit Type" id="evt{{evt.check}}" ng-if="editing(evt.id) && !selectedDayEqualsToday(selectedDay)"><input maxlength="5" ng-change="formatInput(evt.id, evt.check)" class="evt-input" ng-model="evt.check" /></td>
-                            <td data-th="Edit Check" ng-if="!editing(evt.id) && !selectedDayEqualsToday(selectedDay)" ><a class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
+                            <td data-th="Edit Check" ><a ng-if="!editing(evt.id) && !selectedDayEqualsToday(selectedDay)" class="edit-link"><img ng-click="onEdit(evt.id)" class="edit-image" src="img/edit.png" alt="edit" /></a></td>
                             <td data-th="Edit Check" ng-if="editing(evt.id) && !selectedDayEqualsToday(selectedDay)" ><a class="edit-link"><img ng-click="saveEdit(evt.id, selectedDay)" class="edit-image" src="img/save.png" alt="save" /></a></td>
                             <td>
                                 <a class="edit-link" ng-if="editing(evt.id)"><img ng-click="cancelEdition()" class="edit-image" src="img/cancel.png" alt="cancel" /></a>
@@ -176,6 +181,59 @@
               </div>
             </ion-content>
         </div>
+    </script>
+
+    <script id="addNewCheck.html" type="text/ng-template">
+      <div class="modal" style="background-color: rgb(238, 238, 238)">
+        <ion-content scroll="false" class="modal-text">
+          <div class="row">
+            <div class="col col-100">
+              <a><img ng-click="closeNewCheckModal()" style="float:right; margin-top:3%; margin-right:1%;" class="edit-image" src="img/cancel.png" /></a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-100">
+              <div class="row">
+                <div class="col col-33">
+                  <h4 class="edition-title">Start time:</h4>
+                </div>
+                <div clas="col col-77">
+                  <input maxlength="5" ng-change="formatInput(selectedDayOfMonth.evts[0].check, '0newCheckin')" class="new-evt-input" ng-model="selectedDayOfMonth.evts[0].check" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-33">
+                  <h4 class="edition-title">Lunch time:</h4>
+                </div>
+                <div clas="col col-77">
+                  <input maxlength="5" ng-change="formatInput(selectedDayOfMonth.evts[1].check, '1newCheckin')" class="new-evt-input" ng-model="selectedDayOfMonth.evts[1].check" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-33">
+                  <h4 class="edition-title">Return time:</h4>
+                </div>
+                <div clas="col col-77">
+                  <input maxlength="5" ng-change="formatInput(selectedDayOfMonth.evts[2].check, '2newCheckin')" class="new-evt-input" ng-model="selectedDayOfMonth.evts[2].check" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col col-33">
+                  <h4 class="edition-title">Exit time:</h4>
+                </div>
+                  <div clas="col col-77">
+                    <input maxlength="5" ng-change="formatInput(selectedDayOfMonth.evts[3].check, '3newCheckin')" class="new-evt-input" ng-model="selectedDayOfMonth.evts[3].check" />
+                  </div>
+              </div>
+              <div class="row" style="margin-top:10%">
+                <div class="col col-100">
+                  <button class="button button-block medium-button" ng-click="saveNewCheck()">Adicionar novo dia</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-content>
+      </div>
     </script>
 
 </ion-view>

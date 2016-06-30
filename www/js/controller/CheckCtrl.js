@@ -23,6 +23,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         $scope.workedHours = $localstorage.getObject("workedHours");
         if(!$localstorage.isEmpty(today)){
             $scope.today = today.evts;
+            $scope.actualDay = today;
         }
     }
 
@@ -134,6 +135,15 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
         return true;
       }else {
         return false;
+      }
+    }
+
+    $scope.saveCommentOnday = function(){
+      if($scope.actualDay.comments){
+        var today = $localstorage.getObject("today");
+        today.comments = $scope.actualDay.comments;
+        $localstorage.setObject("today", today);
+        init();
       }
     }
 
