@@ -131,7 +131,7 @@ angular.module("workstops").controller("CheckCtrl", function($scope, $localstora
     $scope.maxDayEvents = function(){
       var today = $localstorage.getObject('today');
       var day = new Date();
-      if((today && today.day == apiCheck.addZero(day.getDate())) && $scope.today.length >= 4){
+      if((today && today.day == apiCheck.addZero(day.getDate())) && $scope.today.evts && $scope.today.evts.length >= 4){
         return true;
       }else {
         return false;

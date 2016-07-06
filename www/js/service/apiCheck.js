@@ -86,7 +86,7 @@ angular.module("workstops").service("apiCheck", function($localstorage, apiMonth
         }else {
             var lastMonths = $localstorage.getObject('lastMonths');
             if(actualMonth.month != addZero((newMonth.getMonth()+1))){
-                if(!lastMonths && lastMonths.length<=0){
+                if(!lastMonths || lastMonths.length<=0){
                     lastMonths = [];
                 }
                 lastMonths.push(actualMonth);
